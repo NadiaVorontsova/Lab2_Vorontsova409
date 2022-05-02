@@ -21,20 +21,23 @@ public class GameController : MonoBehaviour
         counter = 0;
         Level levelFirst = new Level()
         {
+            Id = 1,
             Name = "1",
             CountWorms = 2,
             WormHealth = 20,
         };
         Level levelSecond = new Level()
         {
+            Id = 2,
             Name = "2",
             CountWorms = 5,
             WormHealth = 10,
         };
         Level levelThird = new Level()
         {
+            Id = 3,
             Name = "3",
-            CountWorms = 30,
+            CountWorms = 7,
             WormHealth = 5,
         };
         levels = new List<Level>();
@@ -56,6 +59,11 @@ public class GameController : MonoBehaviour
         return levels.FirstOrDefault(x => x.Name == currentLevelName);
         
     }
+    private Level GetNextLevel(int levelId) 
+    {
+        levelId++;
+        return levels.FirstOrDefault(x => x.Id == levelId);
+    }
 
     public void WormWasAte()
     {
@@ -65,19 +73,18 @@ public class GameController : MonoBehaviour
 
         if (CounterText.text == currentLevelTargetText.text)
         {
-            Debug.Log("work");
-            foreach (Level level in levels)
-            {
-                currentLevelNameText.text = level.Name;
-                currentLevelTargetText.text = level.CountWorms.ToString();
-
-            }
+            var nextLevel = GetNextLevel(GetCurrentLevel().Id);
+            currentLevelName = nextLevel.Name;
+            currentLevelNameText.text = GetCurrentLevel().Name;
+            currentLevelTargetText.text = GetCurrentLevel().CountWorms.ToString();
+            counter = 0;
+            CounterText.text = counter.ToString();
 
         }
     }
     public void Spawn()
     {
-        Vector2 position = new Vector2(Random.Range(-11f, 9f), Random.Range(-3f, 3f));
+        Vector2 position = new Vector2(Random.Range(-11f, 31f), Random.Range(-3f, 3f));
         Instantiate(worm, position, Quaternion.identity);
     }
 
